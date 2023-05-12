@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@android:color/white"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="8dp"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_title_movie"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@android:color/black"
-        android:textSize="23sp"
-        tools:text="Titulo do filme"/>
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_poster"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/text_title_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_below="@+id/image_poster"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
+            android:textSize="23sp"
+            android:padding="16dp"
+            tools:text="Titulo do filme"/>
+
+    </RelativeLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -3,6 +3,7 @@ package com.home.moviefinder.ui.listMovie;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,16 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.home.moviefinder.R;
 import com.home.moviefinder.data.model.Movie;
-import com.home.moviefinder.data.network.response.MoviesResponse;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.ListMovieViewHolder> {
 
-    List<MoviesResponse> movies;
+    List<Movie> movies;
 
-    public ListMovieAdapter(List<MoviesResponse> movies) {
-        this.movies = movies;
+    public ListMovieAdapter(){
+        movies = new ArrayList<>();
     }
 
     @NonNull
@@ -31,7 +33,7 @@ public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.List
 
     @Override
     public void onBindViewHolder(@NonNull ListMovieViewHolder holder, int position) {
-        holder.textTitleMovie.setText(movies.get(position).getOriginalTitle());
+        holder.bind(movies.get(position));
     }
 
     @Override
@@ -41,10 +43,26 @@ public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.List
 
     static class ListMovieViewHolder extends RecyclerView.ViewHolder{
         private TextView textTitleMovie;
+        private ImageView imagePosterMovie;
 
         public ListMovieViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitleMovie = itemView.findViewById(R.id.text_title_movie);
+            imagePosterMovie = itemView.findViewById(R.id.image_poster);
+
+
         }
+
+        public void bind(Movie movie){
+            textTitleMovie.setText(movie.getTitle());
+            Picasso.get()
+                    .load("https://image.tmdb.org/t/p/w342/"+movie.getPosterImage())
+                    .into(imagePosterMovie);
+        }
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
     }
 }

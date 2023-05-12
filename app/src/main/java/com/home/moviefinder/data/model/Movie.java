@@ -1,13 +1,19 @@
 package com.home.moviefinder.data.model;
 
 public class Movie {
-    private String nome;
+    private String title;
+    private String posterImage;
 
-    public Movie(String nome) {
-        this.nome = nome;
+    public Movie(String title, String posterImage) {
+        this.title = title;
+        this.posterImage = posterImage;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPosterImage() {
+        return posterImage;
     }
 }
