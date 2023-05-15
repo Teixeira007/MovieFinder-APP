@@ -25,11 +25,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListMovieActivity extends AppCompatActivity {
+public class ListMovieActivity extends AppCompatActivity
+        implements  ListMoviesContract.ListMoviesView{
 
     private RecyclerView recyclerView;
     private ListMovieAdapter listMovieAdapter;
     private Toolbar toolbar;
+    private ListMoviesContract.ListMoviesPresenter presenter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -39,7 +41,9 @@ public class ListMovieActivity extends AppCompatActivity {
 
        configurationToolBar();
        configurationAdapter();
-       getMovies();
+
+       presenter = new ListMoviesPresenter(this);
+       presenter.getMovies();
 
     }
 
@@ -58,30 +62,20 @@ public class ListMovieActivity extends AppCompatActivity {
         recyclerView.setAdapter(listMovieAdapter);
     }
 
-    private void getMovies(){
-        ApiService.getIntance()
-            .getListMoviesPopular("df11c6ebfaff4552cd4ceb4187f105fb")
-            .enqueue(new Callback<MoviesResults>() {
-                @Override
-                public void onResponse(Call<MoviesResults> call, Response<MoviesResults> response) {
-                    if(response.isSuccessful()){
-                        final List<Movie> movies = MovieMapper.fromResponseforDomain(response.body().getResults());
-                        listMovieAdapter.setMovies(movies);
-                    }else{
-                        messageError();
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<MoviesResults> call, Throwable t) {
-                    messageError();
-                }
-            });
+    @Override
+    public void showMovies(List<Movie> movies) {
+        listMovieAdapter.setMovies(movies);
     }
 
-    private void messageError(){
+    @Override
+    public void showError() {
         Toast.makeText(this, "Erro ao carregar lista de filmes", Toast.LENGTH_SHORT).show();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destruiView();
+    }
 }
