@@ -1,6 +1,7 @@
 package com.home.moviefinder.ui.listMovie;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.home.moviefinder.data.mapper.MovieMapper;
 import com.home.moviefinder.data.model.Movie;
 import com.home.moviefinder.data.network.ApiService;
 import com.home.moviefinder.data.network.response.MoviesResults;
+import com.home.moviefinder.ui.detailsMovie.DetailsActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ListMovieActivity extends AppCompatActivity
-        implements  ListMoviesContract.ListMoviesView{
+        implements  ListMoviesContract.ListMoviesView, ListMovieAdapter.ItemMovieClickListener {
 
     private RecyclerView recyclerView;
     private ListMovieAdapter listMovieAdapter;
@@ -55,7 +57,7 @@ public class ListMovieActivity extends AppCompatActivity
     private void configurationAdapter(){
         recyclerView = findViewById(R.id.my_recyclerView);
 
-        listMovieAdapter = new ListMovieAdapter();
+        listMovieAdapter = new ListMovieAdapter(this);
 
         RecyclerView.LayoutManager gridLayout = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayout);
@@ -77,5 +79,12 @@ public class ListMovieActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         presenter.destruiView();
+    }
+
+    @Override
+    public void onItemMovieClicado(Movie movie) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.EXTRA_MOVIE, movie);
+        startActivity(intent);
     }
 }

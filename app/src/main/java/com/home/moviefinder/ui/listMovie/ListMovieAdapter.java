@@ -18,9 +18,12 @@ import java.util.List;
 
 public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.ListMovieViewHolder> {
 
-    List<Movie> movies;
+    private List<Movie> movies;
+    private static ItemMovieClickListener itemMovieClickListener;
 
-    public ListMovieAdapter(){
+
+    public ListMovieAdapter(ItemMovieClickListener itemMovieClickListener){
+        this.itemMovieClickListener = itemMovieClickListener;
         movies = new ArrayList<>();
     }
 
@@ -34,6 +37,7 @@ public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.List
     @Override
     public void onBindViewHolder(@NonNull ListMovieViewHolder holder, int position) {
         holder.bind(movies.get(position));
+
     }
 
     @Override
@@ -44,16 +48,26 @@ public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.List
     static class ListMovieViewHolder extends RecyclerView.ViewHolder{
         private TextView textTitleMovie;
         private ImageView imagePosterMovie;
+        private Movie movie;
+
 
         public ListMovieViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitleMovie = itemView.findViewById(R.id.text_title_movie);
             imagePosterMovie = itemView.findViewById(R.id.image_poster);
 
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(itemMovieClickListener != null){
+                        itemMovieClickListener.onItemMovieClicado(movie);
+                    }
+                }
+            });
         }
 
         public void bind(Movie movie){
+            this.movie = movie;
             textTitleMovie.setText(movie.getTitle());
             Picasso.get()
                     .load("https://image.tmdb.org/t/p/w342/"+movie.getPosterImage())
@@ -64,5 +78,9 @@ public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.List
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
+    }
+
+    public interface ItemMovieClickListener{
+        void onItemMovieClicado(Movie movie);
     }
 }
